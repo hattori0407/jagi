@@ -47,6 +47,7 @@ ja:
       no_answer_users: "ユーザーがひとりも登録されていません。"
       who: "これは誰？"
       answer_user_not_found: "出題できるメンバーがいません。"
+      answer: "答え"
       <<: *common
 
   errors:
