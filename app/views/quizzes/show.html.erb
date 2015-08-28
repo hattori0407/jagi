@@ -1,12 +1,12 @@
-<% if flash[:answer_name] %>
+<% if @prev_answer_user_profile %>
   <div id="quiz_result">
     <%= image_tag flash[:image_url] if flash[:image_url].present? %>
-    <%= content_tag :li, flash[:name] if flash[:name].present? %>
-    <%= content_tag :li, flash[:answer_name] if flash[:answer_name].present? %>
-    <%= content_tag :li, "#{flash[:joined_year]}#{I18n.t('quiz.show.year')}" if flash[:joined_year].present? %>
-    <%= content_tag :li, flash[:group] if flash[:group].present? %>
-    <%= content_tag :li, flash[:project] if flash[:project].present? %>
-    <%= content_tag :li, flash[:detail] if flash[:detail].present? %>
+    <%= content_tag :li, @prev_answer_user_profile.name if @prev_answer_user_profile.name.present? %>
+    <%= content_tag :li, @prev_answer_user_profile.answer_name if @prev_answer_user_profile.answer_name.present? %>
+    <%= content_tag :li, "#{@prev_answer_user_profile.joined_year}#{I18n.t('quiz.show.year')}" if @prev_answer_user_profile.joined_year.present? %>
+    <%= content_tag :li, @prev_answer_user_profile.group if @prev_answer_user_profile.group.present? %>
+    <%= content_tag :li, @prev_answer_user_profile.project if @prev_answer_user_prprojectr_name.present? %>
+    <%= content_tag :li, @prev_answer_user_profile.detail if @prev_answer_usedetailnswer_name.present? %>
   </div>
 <% end %>
 
