@@ -2,7 +2,7 @@ lock '3.2.1'
 
 set :application, 'jagi'
 set :repo_url, 'https://github.com/Yinaura/jagi'
-set :branch, 'capistrano'
+set :branch, 'deploy'
 set :rbenv_ruby, '2.2.3'
 
 set :deploy_to, '/var/www/app/jagi'
