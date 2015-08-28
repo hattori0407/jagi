@@ -31,7 +31,7 @@ class QuizzesController < ApplicationController
     flash[:joined_year] = @answer_user_profile.joined_year if @answer_user_profile.joined_year.present?
     flash[:detail] = @answer_user_profile.detail if @answer_user_profile.detail.present?
 
-    redirect_to quiz_path(answer_user_profile_id: @answer_user_profile.project_id)
+    redirect_to quiz_path(params.permit(:joined_year, :group_id, :project_id, :review_mode, :joined_year) )
   end
 
   private
