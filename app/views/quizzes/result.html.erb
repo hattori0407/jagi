@@ -1,0 +1,31 @@
+<div id="quiz_result">
+  <% if @result == :win %>
+    <div>
+      <%= image_tag @question.profile_image_url(:correct) %>
+    </div>
+    正解です！
+  <% else %>
+    <div>
+      <%= image_tag @question.profile_image_url(:incorrect) %>
+    </div>
+    不正解です...
+  <% end %>
+  <div><%= @question.user.name %></div>
+  <div><%= @question.answer_name %></div>
+  <% if @question.gender == 'male' %>
+    <div><%= I18n.t('user_profiles.edit.male') %></div>
+  <% else %>
+    <div><%= I18n.t('user_profiles.edit.famale') %></div>
+  <% end %>
+  <div><%= "#{@question.joined_year}#{I18n.t('user_profiles.edit.year')}" %></div>
+  <div><%= @question.group.try(:name) %></div>
+  <div><%= @question.project.try(:name) %></div>
+  <div><%= @question.detail %></div>
+</div>
+
+<% if @current_quiz.next_question.present? %>
+  <%= link_to 'next', question_quiz_path %>
+  <%= link_to 'retire', quiz_path, method: :delete %>
+<% else %>
+  全問回答しました <%= link_to '完了する', quiz_path, method: :delete %>
+<% end %>

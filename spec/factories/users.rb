@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :user do
-    name      { Forgery(:basic).text }
+    name      { Forgery(:name).full_name }
     provider  { :google_oauth2 }
     uid       { Forgery(:basic).number }
     email     { Forgery(:email).address }

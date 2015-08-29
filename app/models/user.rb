@@ -1,7 +1,6 @@
 class User < ActiveRecord::Base
   has_one :user_profile
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :omniauthable
+  devise :database_authenticatable, :rememberable, :omniauthable
 
   def self.find_for_google_oauth2(auth)
     user = User.find_by(email: auth.info.email)

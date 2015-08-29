@@ -1,2 +1,23 @@
-<%= @user_profile.name %>
-<%= @user_profile.answer_name %>
+<h2>認証情報</h2>
+
+<ul>
+  <li><%= current_user.name %></li>
+  <li><%= current_user.provider %></li>
+  <li><%= current_user.uid %></li>
+  <li><%= current_user.email %></li>
+</ul>
+
+<h2>プロフィール</h2>
+
+<ul>
+  <li><%= current_user.user_profile.answer_name %></li>
+  <% if current_user.user_profile.gender == 'male' %>
+    <li><%= I18n.t('user_profiles.edit.male') %></li>
+  <% else %>
+    <li><%= I18n.t('user_profiles.edit.famale') %></li>
+  <% end %>
+  <li><%= "#{current_user.user_profile.joined_year}#{I18n.t('user_profiles.edit.year')}" %></li>
+  <li><%= current_user.user_profile.group.try(:name) %></li>
+  <li><%= current_user.user_profile.project.try(:name) %></li>
+  <li><%= current_user.user_profile.detail %></li>
+</ul>

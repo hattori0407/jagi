@@ -1,42 +1,50 @@
-
 class QuizzesController < ApplicationController
-  def show
-    @answer_user_profile = UserProfile.answer_user(params, current_user.user_profile)
+  before_action :authenticate_user!
+  before_action :require_quiz_started, except: [:new, :create]
+  before_action :require_quiz_not_started, only: [:new, :create]
 
-    @total_correct = current_user.user_profile.total_correct
-    @total_incorrect = current_user.user_profile.total_incorrect
+  def new
+  end
 
-    @profile_image_normal = ProfileImage.find_by(user_profile_id: @answer_user_profile.id, situation: 'normal') if @answer_user_profile.present?
+  def create
+    session[:current_quiz] = Quiz.new(user_id: current_user.id, conditions: condition_params)
+    redirect_to question_quiz_path
+  end
+
+  def destroy
+    session.delete(:current_quiz)
+    redirect_to new_quiz_path
+  end
+
+  def question
+    @current_quiz = Quiz.new(session[:current_quiz].with_indifferent_access)
+    @question     = @current_quiz.next_question
   end
 
   def answer
-    @answer_user_profile = UserProfile.find(params[:answer_user_id])
+    @current_quiz = Quiz.new(session[:current_quiz].with_indifferent_access)
+    @current_quiz.answer!(params[:answer_name])
+    session[:current_quiz] = @current_quiz
+    redirect_to result_quiz_path
+  end
 
-    if Quiz.correct? params[:answer_user_name], @answer_user_profile
-      create_answer_history(true, params[:answer_user_name], current_user.user_profile.id, params[:answer_user_id])
-
-      flash[:image_url] = @answer_user_profile.find_image_url('correct')
-      flash[:notice] = I18n.t("quiz.show.correct_result")
-    else
-      create_answer_history(false, params[:answer_user_name], current_user.user_profile.id, params[:answer_user_id])
-
-      flash[:image_url] = @answer_user_profile.find_image_url('incorrect')
-      flash[:notice] = I18n.t("quiz.show.incorrect_result")
-    end
-
-    flash[:name] = @answer_user_profile.name
-    flash[:answer_name] = @answer_user_profile.answer_name if @answer_user_profile.answer_name.present?
-    flash[:project] = @answer_user_profile.project.name if @answer_user_profile.project.present?
-    flash[:group] = @answer_user_profile.group.name if @answer_user_profile.group.present?
-    flash[:joined_year] = @answer_user_profile.joined_year if @answer_user_profile.joined_year.present?
-    flash[:detail] = @answer_user_profile.detail if @answer_user_profile.detail.present?
-
-    redirect_to quiz_path(answer_user_profile_id: @answer_user_profile.project_id)
+  def result
+    @current_quiz = Quiz.new(session[:current_quiz].with_indifferent_access)
+    @question     = @current_quiz.last_question
+    @result       = @current_quiz.last_result
   end
 
   private
 
-  def create_answer_history(correct, answer, user_profile_id, to_user_profile_id)
-    Answer.create!(correct: correct, answer: answer, user_profile_id: user_profile_id, to_user_profile_id: to_user_profile_id)
+  def condition_params
+    params.permit(:group_id, :project_id, :joined_year)
+  end
+
+  def require_quiz_started
+    redirect_to new_quiz_path if session[:current_quiz].blank?
+  end
+
+  def require_quiz_not_started
+    redirect_to question_quiz_path if session[:current_quiz].present?
   end
 end

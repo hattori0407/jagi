@@ -8,9 +8,11 @@
 </head>
 <body>
 
-<% if current_user then %>
+<% if user_signed_in? %>
   <%= link_to 'TOP', root_path %>
-  <%= link_to I18n.t('pages.index.edit_profile'), edit_user_profile_path(current_user.id) %>
+  <%= link_to I18n.t('pages.index.edit_profile'), edit_user_profile_path %>
+  <%= link_to 'クイズを始める', new_quiz_path %>
+  <%= link_to 'logout', destroy_user_session_path, method: :delete %>
 <% end %>
 
 <%= content_tag(:div, flash[:notice], class: 'notice') %>

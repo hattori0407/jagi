@@ -1,4 +1,4 @@
-<%= form_tag(quiz_path, method: 'get') do %>
+<%= form_tag quiz_path, method: :post do %>
   <div>
     <%= label :joined_year, I18n.t('pages.index.joined_year') %>
     <%= select_tag :joined_year, options_for_select(joined_years_selection, selected: params['joined_year']), include_blank: true %>

@@ -1,13 +1,15 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: {
-    omniauth_callbacks: "users/omniauth_callbacks"
+    sessions: 'users/sessions',
+    omniauth_callbacks: 'users/omniauth_callbacks',
   }
-  resources :user_profiles, only: [:edit, :update]
-  resource :page, only: [:index]
-  resource :quiz, only: [:show] do
-    member do
-      post :answer
-    end
+
+  resource :user_profile, only: [:show, :edit, :update]
+  resource :quiz, only: [:new, :create, :destroy] do
+    get  :question, on: :member
+    post :answer,   on: :member
+    get  :result,   on: :member
   end
-  root to: "page#index"
+
+  root to: 'home#welcome'
 end
